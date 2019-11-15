@@ -99,7 +99,7 @@ class(bestmod)
 plot_model(bestmod,"diag") ### acceptable
 
 
-#### Fitting models for max feeding rates (MFR)
+#### Fitting models for max feeding rates (MFR) ####
 
 #### Prior to model fitting it is necessary to illiminate tiny values and 0's 
 #### This affects 3 of 171 data points. 
@@ -118,8 +118,11 @@ globMFR<-lmer(log(MFR)~((log(pred_g)+log(prey_g)+log(temp_C))^2+interaction)+
              REML = FALSE, 
              na.action = "na.fail")
 ### mod checks:
-sjp.lmer(globMFR,"re", y.offset = .4) ## bigger REs here
-sjp.lmer(globMFR,"fe", y.offset = .4) ## some basic body size effects are marginal.
+### not sjp.lmer is now deprecated. Run these next two lines with plot_model() 
+### if you need to see plots!
+
+# sjp.lmer(globMFR,"re", y.offset = .4) ## bigger REs here
+# sjp.lmer(globMFR,"fe", y.offset = .4) ## some basic body size effects are marginal.
 plot_model(globMFR,"diag") ## not as good as slopes
 
 int_MFR<-lmer(log(MFR)~1+(1|pred_type), data=d3) ### intercept only
@@ -131,8 +134,10 @@ ms2 <- dredge(globMFR)
 
 bestMFR<-(get.models(ms2, 1)[[1]])
 
-sjp.lmer(bestMFR,"re", y.offset = .4) ### REs still important here. 
-sjp.lmer(bestMFR,"fe", y.offset = .4) ### makes sense
+### not sjp.lmer is now deprecated. Run these lines with plot_model() 
+### if you need to see plots!
+##sjp.lmer(bestMFR,"re", y.offset = .4) ### REs still important here. 
+##sjp.lmer(bestMFR,"fe", y.offset = .4) ### makes sense
 plot_model(bestMFR,"diag") ### 
 
 
@@ -149,5 +154,5 @@ names(ms2_table) <- c("Intercept", "Encounter strategy", "log(Predator mass)",
 ms2_table <- ms2_table[,c(1:8,11)]
 
 ### write to .csv file
-write.csv(ms2_table, "AICc_MFR_13062019.csv", row.names = F)
+#write.csv(ms2_table, "AICc_MFR_13062019.csv", row.names = F)
 
