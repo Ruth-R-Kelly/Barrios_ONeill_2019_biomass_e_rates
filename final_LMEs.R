@@ -30,8 +30,6 @@ library("sjPlot")
 ## Read in dataset
 d<-read.csv("benthic_functional_response_DB_withMAXMIN.csv",  na.strings = c("", "NA"))
 
-#library(lme4) ## model fitting lme functions
-#library(MuMIn) ## dredge, AICc etc
 
 ## Removing our categories of animals with insuffient data 
 ## SW: an *obligate* sit and wait predator (e.g. anemones)
@@ -46,6 +44,7 @@ levels(d2[,"pred_type"])[c(3,8)]<-c("fish") ### spotted a mistake here:
 d2<-droplevels(d2)
 levels(d2[,"pred_type"])
 
+names(d2)
 
 ##### Mixed model for Capture Rates ####
 
@@ -59,8 +58,11 @@ global_cap<-lmer(log(slopes.g.m2.d)~((log(pred_g)+log(prey_g)+log(temp_C))^2
 
 
 ### visualisation for model checking:
-sjp.lmer(global_cap,"re", y.offset = .4) ## 
-sjp.lmer(global_cap,"fe", y.offset = .4)
+#sjp.lmer(global_cap,"re", y.offset = .4) 
+## sjp.plot function is now deprecated.
+## use plot_model() instead
+plot_model(global_cap,"re", y.offset = .4)
+# sjp.lmer(global_cap,"fe", y.offset = .4) ## 
 plot_model(global_cap,"diag") ## reasonable
 
 ### Running Null model with intercept only and comparing AICc value
@@ -94,8 +96,6 @@ bestmod<-(get.models(ms1, 1)[[1]])
 
 summary(bestmod)
 class(bestmod)
-sjp.lmer(bestmod,"re", y.offset = .4) 
-sjp.lmer(bestmod,"fe", y.offset = .4) ### 
 plot_model(bestmod,"diag") ### acceptable
 
 
